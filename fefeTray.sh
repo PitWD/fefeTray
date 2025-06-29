@@ -2,7 +2,7 @@
 URL="blog.fefe.de"
 fileREF="./fefe.ref"
 fileTMP="./fefe.tmp"
-fileLOG="./fefe.log"        # Optional log file, e.g. fileLOG="./fefe.log"
+fileLOG=""                  # Optional log file, e.g. fileLOG="./fefe.log"
 filePIPE="./fefe.pipe"
 iconERROR="./fefe_RED.png"
 iconWAIT="./fefe_GREY.png"
