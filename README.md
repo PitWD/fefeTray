@@ -26,6 +26,6 @@ Install- and Download Script will follow soon...
 <br>
 - Actually just tested with **x11** and **IceWM**!
 - With **Wayland** we may need the **XWayland** extension.
-- With **gnome** we may need the **gnome-shell-extension-appindicator** extension.
+- With **gnome** we may need the **gnome-shell-extension-appindicator** extension.  
 <br>
 *I'm on all of this... and I know there are other native tools for Wayland, Gnome and KDE... but fefeTray is just a "too hot to sleep" project of the last night...*

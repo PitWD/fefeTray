@@ -8,7 +8,7 @@ iconERROR="./fefe_RED.png"
 iconWAIT="./fefe_GREY.png"
 iconNEW="./fefe_GREEN.png"
 trayIcon="$iconERROR"
-interval=1800               # seconds
+interval=3600               # seconds
 
 scriptPID=$$
 rm "$filePIPE" > /dev/null 2>&1
@@ -32,6 +32,18 @@ CheckPage() {
             trayIcon="$iconWAIT"
         else
             trayIcon="$iconERROR"
+            # Simulate tmpFile to prevent false positive after page or iNet is back
+            cp "$fileREF" "$fileTMP" &> /dev/null
+            if [ "$fileLOG" != "" ]; then
+                # Log only if fileLOG exists
+                echo "$(date): Error fetching page." | tee -a "$fileLOG"
+                # lets ping "duckduckgo.com" or "google.de" to check internet connection
+                if ping -c 1 duckduckgo.com &> /dev/null || ping -c 1 google.de &> /dev/null; then
+                    echo "$(date): Missing or wrong $URL..." | tee -a "$fileLOG"
+                else
+                    echo "$(date): Missing iNet..." | tee -a "$fileLOG"
+                fi
+            fi
         fi
     fi
     if [ ! -f "$fileREF" ]; then
@@ -80,9 +92,12 @@ Reset!bash -c 'rm $fileREF'" >&3
 
 while true; do
     CheckPage
+    sleepTime=${interval}
     case "$trayIcon" in
         "$iconERROR")
             strINFO="Error fetching updates!"
+            # Half sleepTime while error
+            sleepTime=$((sleepTime / 2))
             ;;
         "$iconWAIT")
             strINFO="Waiting for updates..."
@@ -93,7 +108,6 @@ while true; do
     esac
     echo "icon:$trayIcon" >&3
     echo "tooltip:$strINFO" >&3
-    sleepTime=${interval}
     while [ -f "$fileREF" ] && [ "$sleepTime" -gt 0 ]; do
         # sleep only while fileREF exists
         sleep 1
